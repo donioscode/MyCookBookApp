@@ -9,20 +9,15 @@ import UIKit
 
 class HomeViewController: UIViewController {
 
+// MARK: Varibalies
     
-    
-    
-    
-    
-    // MARK: Varibalies
+    @IBOutlet weak var searchBarSearch: UISearchBar!
     @IBOutlet weak var segmentController: UISegmentedControl!
     
     @IBOutlet weak var CollectionView: UICollectionView!
     
-    var segment = UISegmentedControl()
-    
     var recipe: [Recipe] = [
-    Recipe(name: "Osh",
+    Recipe(name: "Creamy shrimp spaghetti",
            description: "Beshqozon oshi juda mazali",
            ingredients: [
             Ingredient(name: "Tuxum", quantity: "2ta", image: UIImage(named: "chicken")!),
@@ -30,7 +25,7 @@ class HomeViewController: UIViewController {
             ],
            steps: [Step(number: 1, description: "suv sol")],
            cookingTime: 30,
-           category: 0,
+           category: "Breakfast",
            image: UIImage(named: "chicken")!,
            kcal: 1000),
     Recipe(name: "Kebab",
@@ -38,7 +33,7 @@ class HomeViewController: UIViewController {
            ingredients: [Ingredient(name: "Tuxum", quantity: "2ta", image: UIImage(named: "chicken")!)],
            steps: [Step(number: 1, description: "suv sol")],
            cookingTime: 25,
-           category: 0,
+           category: "Dinner",
            image: UIImage(named: "kebab")!,
            kcal: 500),
     
@@ -47,7 +42,7 @@ class HomeViewController: UIViewController {
            ingredients: [Ingredient(name: "Tuxum", quantity: "2ta", image: UIImage(named: "chicken")!)],
            steps: [Step(number: 1, description: "suv sol")],
            cookingTime: 25,
-           category: 0,
+           category: "Lunch",
            image: UIImage(named: "kebab")!,
            kcal: 500),
     Recipe(name: "Kebab",
@@ -55,36 +50,59 @@ class HomeViewController: UIViewController {
            ingredients: [Ingredient(name: "Tuxum", quantity: "2ta", image: UIImage(named: "chicken")!)],
            steps: [Step(number: 1, description: "suv sol")],
            cookingTime: 25,
-           category: 0,
+           category: "Desert",
            image: UIImage(named: "kebab")!,
            kcal: 500),
     ]
+    var filteredRicipes = [Recipe]()
     
-  // MARK: ViewDidLoad
+// MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         CollectionView.dataSource = self
         CollectionView.delegate = self
         navigationItem.title = "Recipe App"
         
+        self.filteredRicipes = recipe
+        
         segmentController.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.lightGray], for: .normal)
         segmentController.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .selected)
         
-        //MARK: - Added HomeCollectionViewCell with XIB file
+        searchBarSearch.delegate = self
+        
+//MARK: - Added HomeCollectionViewCell with XIB file
         self.CollectionView.register(UINib(nibName: "HomeCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "CollectionCell")
         
     }
     
     @IBAction func categoryChanged(_ sender: UISegmentedControl) {
-    
+        
+        switch sender.selectedSegmentIndex {
+        case 0:
+            filteredRicipes = recipe
+        case 1:
+            filteredRicipes = recipe.filter { $0.category == "Breakfast" }
+        case 2:
+            filteredRicipes = recipe.filter { $0.category == "Dinner" }
+        case 3:
+            filteredRicipes = recipe.filter { $0.category == "Lunch" }
+        case 4:
+            filteredRicipes = recipe.filter { $0.category == "Desert" }
+        default:
+            break
+        }
+        CollectionView.reloadData()
+        
     }
+    
+   
 }
 
 
 // MARK: - UICollectionViewDataSource
 extension HomeViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return recipe.count
+        return filteredRicipes.count
         
     }
     
@@ -92,11 +110,14 @@ extension HomeViewController: UICollectionViewDataSource {
         guard let cell = CollectionView.dequeueReusableCell(withReuseIdentifier: "CollectionCell", for: indexPath) as? HomeCollectionViewCell else {
             fatalError("Cell not found")
         }
-            let recipes = recipe[indexPath.row]
-            cell.mealImageView.image = recipes.image
-            cell.mealTitle.text = recipes.name
-            cell.mealTime.text = String("\(recipes.cookingTime) min")
-            return cell
+        
+        let recipes = filteredRicipes[indexPath.row]
+        cell.mealImageView.image = recipes.image
+        cell.mealTitle.text = recipes.name
+        cell.mealTime.text = String("\(recipes.cookingTime) min")
+        
+        return cell
+        
     }
 }
 
@@ -140,4 +161,25 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
               return CGSize(width: cellWidth, height: cellHeight)
     }
 }
+
+// MARK: UISearchBarDelegate
+extension HomeViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        filterContentForSearchText(searchText)
+    }
+    func filterContentForSearchText(_ searchText: String) {
+        if searchText.isEmpty {
+            filteredRicipes = recipe
+        } else {
+            filteredRicipes = recipe.filter{ recipe in
+                recipe.name.lowercased().contains(searchText.lowercased())
+            }
+        }
+        CollectionView.reloadData()
+            
+    }
+}
+
+
+
 

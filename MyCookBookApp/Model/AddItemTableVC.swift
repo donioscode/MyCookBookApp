@@ -9,81 +9,56 @@ import UIKit
 
 class AddItemTableVC: UITableViewController {
 
+    @IBOutlet var mainTableView: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        
+        
     }
-
+    
     // MARK: - Table view data source
+    // Array of header titles for different sections
+       let headerTitles = ["Header 1", "Header 2", "Header 3", "Header 4","Header 5"]
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
-    }
+       override func numberOfSections(in tableView: UITableView) -> Int {
+           return headerTitles.count // Number of sections based on header titles
+       }
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
-    }
+       override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+           return headerTitles[section] // Return the corresponding header title for the section
+       }
 
-    /*
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+       override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+           guard let headerView = view as? UITableViewHeaderFooterView else { return }
 
-        // Configure the cell...
+           // Customize header appearance based on the section
+           switch section {
+           case 0:
+               headerView.textLabel?.textColor = UIColor.red
+               headerView.textLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+           case 1:
+               headerView.textLabel?.textColor = UIColor.blue
+               headerView.textLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+           case 2:
+               headerView.textLabel?.textColor = UIColor.green
+               headerView.textLabel?.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+           case 3:
+               headerView.textLabel?.textColor = UIColor.purple
+               headerView.textLabel?.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+           default:
+               headerView.textLabel?.textColor = UIColor.black
+               headerView.textLabel?.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+           }
+       }
 
-        return cell
-    }
-    */
+       override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+           return 40 // Set the height for each header
+       }
+ 
 
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
+  
 
 }
+
+

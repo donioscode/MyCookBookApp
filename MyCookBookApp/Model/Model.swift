@@ -15,7 +15,7 @@ struct Recipe {
     let ingredients: [Ingredient] // Ingredientlar ro'yxati
     let steps: [Step] // Tayyorlash bosqichlari
     let cookingTime: Int // Tayyorlash vaqti (daqiqalarda)
-    let category: Int // Kategoriyasi (Masalan, Breakfast, Lunch)
+    let category: String // Kategoriyasi (Masalan, Breakfast, Lunch)
     let image: UIImage // Retsept rasmi
     let kcal: Int
 }

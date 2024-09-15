@@ -9,6 +9,8 @@ import UIKit
 
 class DetailRecipeViewController: UIViewController {
 
+// MARK: Varibles
+    
     @IBOutlet weak var heartBtn: UIButton!
     @IBOutlet weak var backBtn: UIButton!
     @IBOutlet weak var topView: UIView!
@@ -24,6 +26,8 @@ class DetailRecipeViewController: UIViewController {
 
     var recipes: Recipe?
     
+// MARK: viewDidLoad
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -35,7 +39,8 @@ class DetailRecipeViewController: UIViewController {
             mealImage.roundBottomCorners(radius: 50)
         
         tableView.dataSource = self
-        tableView.delegate = self
+        
+// MARK: Added two tabelViewCell with Xib file
         
         self.tableView.register(UINib(nibName: "IngredientTableViewCell", bundle: nil), forCellReuseIdentifier: "IngredientCell")
         self.tableView.register(UINib(nibName: "RecipeTableViewCell", bundle: nil), forCellReuseIdentifier: "RecipeCell")
@@ -46,12 +51,14 @@ class DetailRecipeViewController: UIViewController {
         self.segmentCont.layer.masksToBounds = true
         self.segmentCont.selectedSegmentIndex = 0 // Default selection
         self.segmentCont.addTarget(self, action: #selector(segmentChanged(_:)), for: .valueChanged)
-        self.teskor()
+        self.getvalue()
 //
         // Do any additional setup after loading the view.
     }
     
-    func teskor(){
+// MARK: getValue
+    
+    func getvalue(){
         if let recipe = recipes {
             mealImage.image = recipe.image
             mealName.text = recipe.name
@@ -93,6 +100,7 @@ extension UIImageView {
 
 extension DetailRecipeViewController: UITableViewDataSource {
     
+// MARK: numberOfRowsInSection
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if segmentCont.selectedSegmentIndex == 0 {
             // Number of ingredients
@@ -103,6 +111,7 @@ extension DetailRecipeViewController: UITableViewDataSource {
         }
     }
     
+// MARK: cellForRowAt
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if segmentCont.selectedSegmentIndex == 0 {
             // Show ingredient cell (FirstCell)
@@ -125,6 +134,3 @@ extension DetailRecipeViewController: UITableViewDataSource {
    
 }
 
-extension DetailRecipeViewController: UITableViewDelegate {
-    
-}
